@@ -2,9 +2,7 @@ import { useState } from 'react'
 import './App.css'
 
 function App() {
-  const [team, setTeam] = useState([])
-  const [money, setMoney] = useState(100)
-  const [zombieFighters, setZombieFighters] = useState(
+  const fightersList =
     [
       {
         id: 1,
@@ -87,17 +85,25 @@ function App() {
         img: '/src/assets/images/Leader.jpg',
       },
     ]
+  // Separated zombieFighters into a variable (fightersList) to add to state so later when I want to
+  //  add a reset button i can access the original value of the array before it was altered...
 
-  )
+
+
+  const [team, setTeam] = useState([])
+  const [money, setMoney] = useState(100)
+  const [zombieFighters, setZombieFighters] = useState(fightersList)
+
   const handleAddFighter = (fighter) => {
     if (money < fighter.price) {
-      console.log('Not enough money')
+      // console.log('Not enough money')
+      alert('Not enough money!')
       return
     }
 
     setTeam([...team, fighter])
 
-    // setZombieFighters(zombieFighters.filter(f => f.id !== fighter.id))
+    setZombieFighters(zombieFighters.filter(f => f.id !== fighter.id))
     // This could work if you wanted the fighter to no longer be available after being added to the team
 
     setMoney(money - fighter.price)
@@ -123,7 +129,7 @@ function App() {
 
 
   const resetGame = () => {
-    setZombieFighters(zombieFighters)
+    setZombieFighters(fightersList)
     setTeam([])
     setMoney(100)
   }
@@ -136,26 +142,28 @@ function App() {
         <h2>Total Strength: {totalStrength}</h2>
         <h2>Total Agility: {totalAgility}</h2>
 
-              <h2>Your Team:</h2>
-              {team.length === 0 ? (
-                <p>Pick some team members!</p>
-              ) : (
-                <ul>
-                  {team.map((fighter, index) => (
-                    <li key={index} className='App'>
-                      <img src={fighter.img} alt={fighter.name} />
-                      <h3>{fighter.name}</h3>
-                      <p>Strength: {fighter.strength}</p>
-                      <p>Agility: {fighter.agility}</p>
-                      <button onClick={() => handleRemoveFighter(fighter)}>
-                        Remove from Team
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-      
-              )}
-              
+        <h2>Your Team:</h2>
+        {team.length === 0 ? (
+          <p>Pick some team members!</p>
+        ) : (
+          <ul>
+            {team.map((fighter, index) => (
+              <li key={index} className='App'>
+                <img src={fighter.img} alt={fighter.name} />
+                <h3>{fighter.name}</h3>
+                <p>Strength: {fighter.strength}</p>
+                <p>Agility: {fighter.agility}</p>
+                <button onClick={() => handleRemoveFighter(fighter)}>
+                  Remove from Team
+                </button>
+              </li>
+            ))}
+          </ul>
+
+        )}
+
+
+        <h2>Fighters</h2>
         <ul>
           {zombieFighters.map((fighter) => (
             <li key={fighter.id} className='fighterItem'>
